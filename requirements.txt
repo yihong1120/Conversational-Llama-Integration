@@ -1,0 +1,6 @@
+python-dotenv
+requests
+flask
+pyTelegramBotAPI
+psycopg2
+llama-cpp-python
