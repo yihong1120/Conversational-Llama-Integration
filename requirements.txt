@@ -4,3 +4,4 @@ flask
 pyTelegramBotAPI
 psycopg2
 llama-cpp-python
+langchain
