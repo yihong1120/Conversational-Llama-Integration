@@ -25,10 +25,10 @@ class DatabaseHandler:
             password: The database password.
             host: The database host.
         """
-        self.dbname = DB_PARAMS['dbname']
-        self.user = DB_PARAMS['user']
-        self.password = DB_PARAMS['password']
-        self.host = DB_PARAMS['host']
+        self.dbname = dbname
+        self.user = user
+        self.password = password
+        self.host = host
 
     @contextmanager
     def get_db_connection(self):
@@ -110,7 +110,7 @@ class DatabaseHandler:
 
 # Example usage
 if __name__ == '__main__':
-    db_handler = DatabaseHandler(DB_NAME, DB_USER, DB_PASSWORD, DB_HOST)
+    db_handler = DatabaseHandler(DB_PARAMS['dbname'], DB_PARAMS['user'], DB_PARAMS['password'], DB_PARAMS['host'])
     user_name = "example_user"
     message_sent = "What is the weather like today?"
     reply_received = "The weather is sunny."
