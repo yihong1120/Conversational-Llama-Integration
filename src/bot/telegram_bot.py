@@ -1,19 +1,34 @@
-import telebot
 import os
-from dotenv import load_dotenv
+from telegram import Update
+from telegram.ext import Application, MessageHandler, filters, CallbackContext
 
-load_dotenv()
-
+# Get Telegram token from environment variable
 TOKEN = os.getenv('TELEGRAM_TOKEN')
-bot = telebot.TeleBot(TOKEN)
 
-@bot.message_handler(commands=['start', 'help'])
-def send_welcome(message):
-    bot.reply_to(message, "How can I help you?")
+# Initialise message handler
+async def message_handler(update: Update, context: CallbackContext) -> None:
+    user_message = update.message.text
+    chat_id = update.message.chat_id
 
-@bot.message_handler(func=lambda m: True)
-def echo_all(message):
-    bot.reply_to(message, message.text)
+    # Process message
+    response = context.user_data['handle_conversation'](str(chat_id), user_message)
+    
+    # Send response
+    await context.bot.send_message(chat_id=chat_id, text=response)
 
-def init_telegram_bot():
-    bot.polling()
+# Initialise Telegram bot
+def init_telegram_bot(handle_conversation):
+    application = Application.builder().token(TOKEN).build()
+    
+    # Set user data
+    application.user_data['handle_conversation'] = handle_conversation
+
+    # Set message handler
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
+    
+    # Start polling
+    application.run_polling()
+
+# Example usage
+if __name__ == '__main__':
+    pass
