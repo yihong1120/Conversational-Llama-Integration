@@ -1,7 +1,8 @@
 python-dotenv
 requests
 flask
-pyTelegramBotAPI
+python-telegram-bot
 psycopg2
 llama-cpp-python
 langchain
+linebot
