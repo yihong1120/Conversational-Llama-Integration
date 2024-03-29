@@ -42,13 +42,15 @@ class ConversationHandler:
         full_prompt = f"{context}\nQ: {new_question}\nA:"
         
         # Generate the new reply using the Llama model
-        output = self.llm.generate([full_prompt])[0]  # Assume generate returns a list of responses
+        output = self.llm.generate([full_prompt])  # Assume generate returns a list of responses
+        response_text = output.generations[0][0].text
+        print(f"output: {response_text}")
 
         # Insert new conversation into the database
-        self.db_handler.insert_conversation(user_name, new_question, output)
+        self.db_handler.insert_conversation(user_name, new_question, response_text)
 
         # Return the new reply
-        return output
+        return response_text   
 
 # Example usage
 if __name__ == '__main__':
