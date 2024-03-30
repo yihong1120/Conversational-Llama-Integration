@@ -1,5 +1,6 @@
 from telegram import Update
-from telegram.ext import Application, MessageHandler, filters, CallbackContext, ContextTypes, Updater
+from telegram.ext import Application, MessageHandler, filters, CallbackContext
+from telegram.error import TimedOut
 from src.utils.config import TELEGRAM_PARAMS
 
 # Get Telegram token from environment variable
@@ -10,10 +11,17 @@ async def message_handler(update: Update, context: CallbackContext) -> None:
     user_message = update.message.text
     chat_id = update.message.chat_id
 
-    # Call handle_conversation function from bot_data
-    response = context.bot_data['handle_conversation'](str(chat_id), user_message)
+    try:
+        # Call handle_conversation function from bot_data
+        response = context.bot_data['handle_conversation'](str(chat_id), user_message)
 
-    await context.bot.send_message(chat_id=chat_id, text=response)
+        # Send response to user
+        await context.bot.send_message(chat_id=chat_id, text=response)
+
+    # Handle timeout exception
+    except TimedOut:
+        # Send timeout message to user
+        await context.bot.send_message(chat_id=chat_id, text="請求超時，請稍後再試。")
 
 # Initialise Telegram bot
 def init_telegram_bot(handle_ai_conversation):
