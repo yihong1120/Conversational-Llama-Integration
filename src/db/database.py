@@ -73,7 +73,7 @@ class DatabaseHandler:
                 (user_name, message_sent, reply_received)
             )
 
-    def get_user_history(self, user_name: str, limit: int = 10) -> List[Dict[str, Any]]:
+    def get_user_history(self, user_name: str, limit: int = 6) -> List[Dict[str, Any]]:
         """
         Retrieves the user's conversation history up to a specified limit.
 
