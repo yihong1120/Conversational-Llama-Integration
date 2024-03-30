@@ -37,13 +37,16 @@ class ConversationHandler:
         """
         # Retrieve user's conversation history
         history = self.db_handler.get_user_history(user_name)
+        history_reversed = history[::-1]
         # Combine previous conversations with the new question
-        context = "\n".join([f"Q: {item['message_sent']} A: {item['reply_received']}" for item in history])
-        full_prompt = f"{context}\nQ: {new_question}\nA:"
+        context = "\n".join([f"Q: {item['message_sent']} new_question: {item['reply_received']}" for item in history_reversed])
+        full_prompt = f"{context}\nAbove is a transcript of a previous Q&A conversation, new_question is: {new_question}"
         
         # Generate the new reply using the Llama model
         output = self.llm.generate([full_prompt])  # Assume generate returns a list of responses
         response_text = output.generations[0][0].text
+        print(f"full_prompt: {full_prompt}")    
+        # print(f"new_question: {new_question}")
         print(f"output: {response_text}")
 
         # Insert new conversation into the database
